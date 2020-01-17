@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+        <script async defer src="https://buttons.github.io/buttons.js"></script>
+        <link rel='icon' type="image/png" href="img/logo.png?=1">
+        <style>
+
+            h1 {
+                color: #D3C4BE;
+            }
+            body {
+                color: black;
+            }
+            html, body{
+                height: 100%;
+            }
+            p {
+                color: #696969;
+                font-size: 15pt;
+            }
+            .jumbotron{
+                position: relative;
+                color: black;
+            }
+            .footer{
+                height: fit-content;
+                left: 0;
+                bottom: 0;
+                width: 100%;
+                color: #000000;
+            }
+            .github-button{
+                position: right;
+            }
+        </style>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <div class="title">
+            <title>Sugarchain Reward Half Countdown</title>
+        </div>
+    </head>
+    <div class="text-center container">
+        <p1><a href="https://sugarchain.org" target="_blank"><img src="img/logo_dark.png" style="position: center; width: 64px; height: 64px;"></a></p1>
+    </div>
+    <h1 style="text-align: center">Sugarchain Block Reward Half Countdown!</h1>
+    <div style="background: #696969 !important" class="jumbotron text-center">
+        <h2 ><span id="hours">loading...</span><br>
+        Left until halving
+        </h2>
+    </div>
+    <body>
+        <table class="table table-striped   ">
+            <tbody>
+                <tr>
+                    <th scope="row">
+        <td><p>Block Height: </p></td>
+        <td align="right"><p><span id="listblocks">loading...</span></p></td>
+                    </th>
+                </tr>
+                <tr>
+                    <th scope="row">
+        <td><p>Block Reward: </p></td>
+        <td align="right"><p><span id="reward">loading...</span></p></td>
+                    </th>
+                </tr>
+                <tr>
+                    <th scope="row">
+        <td><p>Remaining Blocks Left: </p></td>
+        <td align="right"><p><span id="blkleft">loading...</span></p></td>
+                    </th>
+                </tr>
+                <tr>
+                    <th scope="row">
+        <td><p>Current Network Difficulty: </p></td>
+        <td align="right"><p><span id="netDifficulty">loading...</span></p></td>
+                    </th>
+                </tr>
+                <tr>
+                    <th scope="row">
+        <td><p>Current Network Hashrate: </p></td>
+        <td align="right"><p><span id="netHashrate">loading...</span></p></td>
+                    </th>
+                </tr>
+                <tr>
+                    <th scope="row">
+        <td><p>Approx. Sugar Left to Mine: </p></td>
+        <td align="right"><p><span id="sugarLeft">loading...</span></p></td>
+                    </th>
+                </tr>
+                <tr>
+                    <th scope="row">
+        <td><p>Current Price SUGAR/USD: </p></td>
+        <td align="right"><p><span id="priceusd">loading...</span></p></td>
+                    </th>
+                </tr>
+                <tr>
+                    <th scope="row">
+        <td><p>Current Price SUGAR/BTC: </p></td>
+        <td align="right"><p><span id="pricebtc">loading...</span></p></td>
+                    </th>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+    <footer style="bottom: 0px;">
+        <div class="footer text-center">
+            <a class="github-button" href="https://github.com/Nugetzrul3/nugetzrul3.github.io/fork" data-color-scheme="no-preference: dark; light: dark; dark: dark" data-icon="octicon-repo-forked" data-show-count="true" aria-label="Fork Nugetzrul3/nugetzrul3.github.io on GitHub">Fork</a>&nbsp<a style="position: absolute TOP;" class="github-button" href="https://github.com/Nugetzrul3/nugetzrul3.github.io" data-color-scheme="no-preference: dark; light: dark; dark: dark;" data-icon="octicon-star" data-show-count="true" aria-label="Star Nugetzrul3/nugetzrul3.github.io on GitHub">Star</a>&nbsp<a class="github-button" href="https://github.com/Nugetzrul3" data-color-scheme="no-preference: dark; light: dark; dark: dark;" aria-label="Follow @Nugetzrul3 on GitHub" data-show-count="true">Follow @Nugetzrul3</a>&nbsp<a class="github-button" href="https://github.com/volbil" data-color-scheme="no-preference: dark; light: dark; dark: dark;" aria-label="Follow @volbil on GitHub" data-show-count="true">Follow @volbil</a>
+        </div>
+    </footer>
+
+        <script>
+            api = "https://api.sugarchain.org"
+
+            function getPrice() {
+                return Promise.resolve($.ajax({
+                    url: api + "/price",
+                    dataType: 'json',
+                    type: 'GET',
+                }))
+            }
+
+            function getBlockHeight() {
+                return Promise.resolve($.ajax({
+                    url: api + "/info",
+                    dataType: "json",
+                    type: "GET"
+                }))
+            }
+
+            function printData() {
+                getBlockHeight().then(function(data) {
+                    var height = data.result.blocks
+                    $("#listblocks").text(height)
+                })
+            }
+
+            function getTime() {
+                getBlockHeight().then(function(data) {
+                    var height = data.result.blocks
+                    var time = height * 5
+                })
+            }
+            function getBlockReward() {
+                getBlockHeight().then(function(data) {
+                    var getReward = parseInt(data.result.reward)
+                    var blockreward = getReward / 100000000
+                    $("#reward").text(blockreward)
+                })
+            }
+            function secondsToHms(d) {
+                d = Number(d);
+                
+                var hours = Math.floor(d / 3600);
+                var m = Math.floor(d % 3600 / 60);
+                var s = Math.floor(d % 3600 % 60);
+                var day = Math.floor(hours / 24)
+                var h = hours - (day * 24)
+
+                return (day) + " Days, " + (h) + 'h' +":" + ('0' + m).slice(-2) + 'm' + ":" + ('0' + s).slice(-2) + 's';
+            }
+            n = 1
+            function getRemainingBlocksLeft() {
+                getBlockHeight().then(function(data) {
+                half = 12500000 * n
+                if(document.getElementById("blkleft").innerHTML == "0") {
+                    n++;
+                } else if (document.getElementById("blkleft").innerHTML > "0") {
+                    n;
+                }
+                height = data.result.blocks
+                remainheight = half-height
+                $("#blkleft").text(remainheight)
+                $("#hours").text(secondsToHms(remainheight * 5))
+                })
+                }
+
+            function getNetDifficulty() {
+                getBlockHeight().then(function(data) {
+                    getnetDif = parseFloat(data.result.difficulty)
+                    $("#netDifficulty").text(getnetDif)
+                })
+            }
+            
+            function getNetHash() {
+                getBlockHeight().then(function(data) {
+                    netHash = Math.round(((data.result.nethash) / 1000000) * 100) / 100
+                    $("#netHashrate").text(netHash + " MH/S")
+                })
+            }
+            
+            function getAmountSugarLeft() {
+                amountLeft = Math.round((document.getElementById("blkleft").innerHTML) * (document.getElementById("reward").innerHTML))
+                $("#sugarLeft").text(amountLeft)
+            }
+
+            function getCurrentPrice() {
+                getPrice().then(function(data) {
+                    priceUSD = parseFloat(data.result.usd)
+                    getpriceBTC = data.result.btc
+                    priceBTC = Number(getpriceBTC).toLocaleString(undefined, {minimumFractionDigits: 8, maximumFractionDigits: 8})
+                    $("#priceusd").text("$" + priceUSD)
+                    $("#pricebtc").text(priceBTC + "BTC")
+
+                })
+            }
+
+            setInterval(function() {
+                printData()
+                getTime()
+                getBlockReward()
+                getRemainingBlocksLeft()
+                getNetDifficulty()
+                getNetHash()
+                getAmountSugarLeft()
+                getCurrentPrice()
+            }, 1000)
+        </script>
+</html>
