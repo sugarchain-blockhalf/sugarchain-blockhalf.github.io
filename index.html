@@ -221,5 +221,16 @@
                 getAmountSugarLeft()
                 getCurrentPrice()
             }, 1000)
+
+            $("#hours").hover(function() {
+                $(this).stop().animate({
+                    fontSize: "2em"
+                }, 1000);
+            },
+            function() {
+                $(this).stop().animate({
+                    fontSize: "1em"
+                }, 1000);
+            });
         </script>
 </html>
