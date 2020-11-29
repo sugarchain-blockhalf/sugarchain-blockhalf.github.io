@@ -43,7 +43,7 @@
         </style>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <div class="title">
-            <title>Sugarchain Reward Half Countdown</title>
+            <title id="counter">Sugarchain Reward Half Countdown</title>
         </div>
     </head>
     <div class="text-center container">
@@ -56,7 +56,7 @@
         </h2>
     </div>
     <body>
-        <table class="table table-striped table-sm" style="height: fit-content; width: 100%">
+        <table class="table table-striped table-sm" style="height: fit-content; width: 100%;">
             <tbody>
                 <tr>
                     <th scope="row">
@@ -126,7 +126,7 @@
                 }))
             }
 
-            function getBlockHeight() {
+            function getInfo() {
                 return Promise.resolve($.ajax({
                     url: api + "/info",
                     dataType: "json",
@@ -134,26 +134,39 @@
                 }))
             }
 
-            function printData() {
-                getBlockHeight().then(function(data) {
+            n = 1
+            function setInfo() {
+                getInfo().then(function (data) {
                     var height = data.result.blocks
+                    var getReward = parseInt(data.result.reward)
+                    var blockReward = getReward / 100000000
+                    var half = 12500000 * n
+                    var remainheight = half - height
+                    var netDiff = parseFloat(data.result.difficulty)
+                    var netHash = data.result.nethash
+
                     $("#listblocks").text(height)
+                    $("#reward").text(blockReward)
+                    $("#blkleft").text(remainheight)
+
+                    if (document.getElementById("blkleft").innerHTML == "0") {
+                        n++
+                    }
+                    else if (document.getElementById("blkleft").innerHTML > "0") {
+                        n
+                    }
+
+                    var amountLeft = Math.round((document.getElementById("blkleft").innerHTML) * (document.getElementById("reward").innerHTML))
+
+                    $("#hours").text(secondsToHms(remainheight * 5) + 691200)
+
+                    $("#netDifficulty").text(netDiff)
+                    $("#netHashrate").text(convertHashFormat(netHash))
+
+                    $("#sugarLeft").text(amountLeft)
                 })
             }
 
-            function getTime() {
-                getBlockHeight().then(function(data) {
-                    var height = data.result.blocks
-                    var time = height * 5
-                })
-            }
-            function getBlockReward() {
-                getBlockHeight().then(function(data) {
-                    var getReward = parseInt(data.result.reward)
-                    var blockreward = getReward / 100000000
-                    $("#reward").text(blockreward)
-                })
-            }
             function secondsToHms(d) {
                 d = Number(d);
                 
@@ -165,39 +178,29 @@
 
                 return (day) + " Days, " + (h) + 'h' +":" + ('0' + m).slice(-2) + 'm' + ":" + ('0' + s).slice(-2) + 's';
             }
-            n = 1
-            function getRemainingBlocksLeft() {
-                getBlockHeight().then(function(data) {
-                half = 12500000 * n
-                if(document.getElementById("blkleft").innerHTML == "0") {
-                    n++;
-                } else if (document.getElementById("blkleft").innerHTML > "0") {
-                    n;
-                }
-                height = data.result.blocks
-                remainheight = half-height
-                $("#blkleft").text(remainheight)
-                $("#hours").text(secondsToHms((remainheight * 5) + 691200))
-                })
-                }
 
-            function getNetDifficulty() {
-                getBlockHeight().then(function(data) {
-                    getnetDif = parseFloat(data.result.difficulty)
-                    $("#netDifficulty").text(getnetDif)
-                })
-            }
-            
-            function getNetHash() {
-                getBlockHeight().then(function(data) {
-                    netHash = Math.round(((data.result.nethash) / 1000000) * 100) / 100
-                    $("#netHashrate").text(netHash + " MH/S")
-                })
-            }
-            
-            function getAmountSugarLeft() {
-                amountLeft = Math.round((document.getElementById("blkleft").innerHTML) * (document.getElementById("reward").innerHTML))
-                $("#sugarLeft").text(amountLeft)
+            function convertHashFormat(hashes = 0) {
+                if (hashes < 1e3) {
+                    return hashes + " H/s"
+                }
+                else if (hashes > 1e3 && hashes < 1e6) {
+                    return (hashes / 1e3).toFixed(3) + " KH/s"
+                }
+                else if (hashes > 1e6 && hashes < 1e9) {
+                    return (hashes / 1e6).toFixed(3) + " MH/s"
+                }
+                else if (hashes > 1e9 && hashes < 1e12) {
+                    return (hashes / 1e9).toFixed(3) + " GH/s"
+                }
+                else if (hashes > 1e12 && hashes < 1e15) {
+                    return (hashes / 1e12).toFixed(3) + " TH/s"
+                }
+                else if (hashes > 1e15 && hashes < 1e18) {
+                    return (hashes / 1e15).toFixed(3) + " PH/s"
+                }
+                else if (hashes > 1e18 && hashes < 1e21) {
+                    return (hashes / 1e18).toFixed(3) + " EH/s"
+                }
             }
 
             function getCurrentPrice() {
@@ -212,16 +215,10 @@
             }
 
             setInterval(function() {
-                printData()
-                getTime()
-                getBlockReward()
-                getRemainingBlocksLeft()
-                getNetDifficulty()
-                getNetHash()
-                getAmountSugarLeft()
+                setInfo()
                 getCurrentPrice()
-            }, 1000)
-
+            }, 2000)
+            
             $("#hours").hover(function() {
                 $(this).stop().animate({
                     fontSize: "2em"
