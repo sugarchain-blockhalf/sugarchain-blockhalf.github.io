@@ -149,10 +149,10 @@
                     $("#reward").text(blockReward)
                     $("#blkleft").text(remainheight)
 
-                    if (document.getElementById("blkleft").innerHTML == "0") {
+                    if (parseInt(document.getElementById("blkleft").innerHTML) <= 0) {
                         n++
                     }
-                    else if (document.getElementById("blkleft").innerHTML > "0") {
+                    else if (parseInt(document.getElementById("blkleft").innerHTML) > 0) {
                         n
                     }
 
